@@ -1,0 +1,57 @@
+.first_line {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 5%;
+}
+
+.div_input{
+    display: grid;
+    grid-template-columns: 220px auto;
+}
+
+p{
+    font-size: 22px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 8px;        
+}
+
+label{
+    margin: 10px;
+    padding-top: 5px;
+}
+
+.text_input{
+    height: 20px;
+    max-width: 50%;
+    min-width: 250px;
+    margin: 10px;
+    outline-color: rgb(103, 151, 255);;
+}
+
+#div_button{
+    margin-left: 19px;
+    display: flex;
+    max-width: 50%;
+    justify-content: flex-end;
+    min-width: 250px;
+}
+
+.input_button{
+    margin-top: 15px;
+    height: 45px;
+    width: 150px;
+    font-size: 15px;
+    font-weight: 100;
+    background-color: rgb(103, 151, 255);
+    border-color: rgb(103, 151, 255);
+    border-width: 2px;
+    border-style: solid;
+    color: white;
+    border-radius: 5px;
+}
+
+.input_button:hover{
+    background-color: rgb(137, 173, 250);
+}  
