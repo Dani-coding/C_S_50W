@@ -1,0 +1,74 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<form action="{% url 'ad' ad.pk %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="watched" value="{{ watched }}">
+    <input type="hidden" name="iscomment" value="False">
+    <span> 
+        {% if watched %} 
+           You are watching this listing
+        {% else %}
+            You are not watching this listing
+        {% endif %}
+        <input type="submit" value="Change it">
+    </span>
+</form>
+<h2>{{ ad.title }}</h2>
+    <div class="ad2">
+        <p> {{ ad.description }} </p>
+
+        {% if ad.actual_price == 0 %} 
+            <h4> The starting price is: {{ ad.start_bid }}</h4>
+            <h6> {{ msn }} </h6>
+            <form action="{% url 'ad' ad.pk %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit">
+                <input type="hidden" name="watchlist" value="False">
+                <input type="hidden" name="iscomment" value="False">
+            </form>
+        {% else %}
+            <h4> The actual price is: {{ ad.actual_price }} €</h4>
+            <h6> {{ msn }} </h6>
+            <form action="{% url 'ad' ad.pk %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit">
+                <input type="hidden" name="watchlist" value="False">
+                <input type="hidden" name="iscomment" value="False">
+            </form>
+
+        {% endif %}
+
+        {% if ad.cat %} 
+            <p>category: {{ ad.cat }} </p>
+        {% endif %}
+        <img src= "{{ ad.image }}" onerror="this.style.display='none'" alt="image of {{ ad.title }}" height="30%" width="70%"> 
+    </div>
+
+    <div>
+        {% for comment in comments %}
+            <div>
+                <h6> {{ comment.user}} said:</h6>
+                <p> {{ comment.content}} </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h4>You can comment</h4>
+        <div>
+            <h6> {{ user}} says:</h6>
+            <form action="{% url 'newcomment' %}" method="post">
+                {% csrf_token %}
+                <textarea name="newcomment" rows="4" cols="50" placeholder="write here"></textarea>
+                <input type="hidden" name="watchlist" value="False">
+                <input type="hidden" name="iscomment" value="True">
+                <input type="submit" value="Send">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

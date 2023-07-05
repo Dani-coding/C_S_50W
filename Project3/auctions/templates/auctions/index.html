@@ -1,0 +1,23 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% for ad in ads %}
+        <div class="ad" onclick='location.href="{% url 'ad' ad.pk %}";' style="cursor: pointer;">
+                <h4> {{ ad.title }} </h4>
+                <p> {{ ad.description }} </p>
+                {% if ad.actual_price == 0 %}
+                    <h6> Starting price: {{ ad.start_bid }} €</h6>
+                {% else %}
+                    <h6> Actual price: {{ ad.actual_price }} €</h6>
+                {% endif %}
+                {% if ad.cat %} 
+                    <p>category: {{ ad.cat }} </p>
+                {% endif %}
+                <img src= "{{ ad.image }}" onerror="this.style.display='none'" alt="image of {{ ad.title }}" height="30%" width="70%"> 
+
+        </div>
+    {% endfor %}
+    
+{% endblock %}

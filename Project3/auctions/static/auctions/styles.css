@@ -1,0 +1,22 @@
+body {
+    padding: 10px;
+}
+
+.ad {
+    margin-bottom: 5px;
+    padding: 3px;
+    background-color: rgb(135, 222, 164);
+    width: 400px;
+}
+
+.ad2 {
+    margin-bottom: 5px;
+    padding: 3px;
+    background-color: rgb(211, 236, 100);
+    width: 400px;
+    align-content: center;
+}
+
+.new_form {
+    background-color: rgb(138, 229, 199);
+}
