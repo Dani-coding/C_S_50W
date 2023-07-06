@@ -50,26 +50,31 @@
 
     <!--  Comments -->
 
-    <div>
-        {% for comment in comments %}
-            <div>
-                <h6> {{ comment.user }} said:</h6>
-                <textarea maxlength=200 readonly> {{ comment.content }} </textarea>
-            </div>
-        {% endfor %}
-    </div>
-
-    <div>
-        <h4>You can comment... </h4>
-        <div>
+<div style="width: 400px;">
+    <div >
+        <div style="background-color: rgb(129, 197, 253); margin-bottom: 2px;">
+            <h4>You can comment... </h4>
             <h6> {{ user }} says:</h6>
             <form action="{% url 'ad' ad.pk %}" method="post">
                 {% csrf_token %}
-                <textarea name="newcomment" rows="4" cols="50" maxlength=200 placeholder="write here"></textarea>
+                <textarea required name="newcomment" rows="3" cols="50" maxlength=200 placeholder="write here" style="resize: none;"></textarea>
                 <input type="submit" name="click" value="Send">
             </form>
         </div>
     </div>
+
+    <div>
+        {% for comment in comments %}
+            <div style="background-color: rgb(133, 241, 241); margin-bottom: 2px;">
+                <span>
+                    <h6> {{ comment.user }} said:</h6>
+                    <textarea readonly maxlength=200 cols="50" style="resize: none;"> {{ comment.content }} </textarea>
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
 
 
 {% endblock %}

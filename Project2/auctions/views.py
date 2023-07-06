@@ -56,23 +56,24 @@ class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea, max_length=200, required=True)
 
 """
-class NewBid(ModelForm):
-     class Meta:
-         model = Ad
-         fields = ["actual_price"]
-         widgets = {
-            "actual_price": forms.TextInput(attrs={'class': 'new_actual_price'}),
-        }
-
-bids = Bid.objects.filter(username=ad.username, ad=ad.pk)
-    bestbid = bids.aggregate(Max("price"))
-    
-                #return HttpResponse(f"The actual price is {actual_price} and the starting bid is {start_bid}")
+        #return HttpResponse(f"The actual price is {actual_price} and the starting bid is {start_bid}")
 """
 
 def index(request):
     return render(request, "auctions/index.html", {
         "ads" : Ad.objects.all(),
+    })
+
+def categories(request):
+    return render(request, "auctions/categories.html", {
+        "categories" :Cat.objects.all(),
+    })
+
+def category(request, name):
+    cat = Cat.objects.get(name=name)
+    return render(request, "auctions/category.html", {
+        "name" : name,
+        "ads" : Ad.objects.filter(cat=cat),
     })
 
 def ad(request, ad_pk):
@@ -158,61 +159,6 @@ def ad(request, ad_pk):
         "watched" : watched,
         "msg" : msg,
     })
-
-
-"""
-        submit = request.POST.get('submit_name')
-        if "Approve" in submit:
-            # Do something
-        elif: "Cancel" in submit:
-            # Do something else
-        
-        try:
-            if (request.POST["watched"]) :
-                if wl:
-                    #w_msg = "This listing is not in your Watchlist"
-                    wl.delete()
-                    watched = False 
-                else:
-                    #w_msg = "This listing is in your Watchlist"
-                    new = Watchlist(user=user, ad=ad)
-                    new.save()
-                    watched = True
-        except:
-            form = NewBid()
-            form = NewBid(request.POST)
-            if form.is_valid():
-                form.clean()
-                actual_price = Decimal(form["actual_price"].value())
-                #return HttpResponse(f"The actual price is {actual_price} and the starting bid is {start_bid}")
-                if ( (ad.actual_price == 0) and (actual_price < ad.start_bid) ):
-                    msg = "You must bid higher than the starting price."
-                elif (actual_price<=ad.actual_price):
-                    msg = "You must bid higher than the acutal price."
-                else:
-                    b = Bid(user=ad.user, ad=ad, price=actual_price)
-                    b.save()
-                    Ad.objects.filter(pk=ad.pk).update(actual_price=actual_price)
-                    ad = Ad.objects.get(pk=ad_pk)
-                    return render(request, "auctions/ad.html", {
-                        "ad_pk" : ad.pk,
-                        "ad" : ad,
-                        "form" : NewBid(),
-                        #"w_msg" : w_msg,
-                        "watched" : watched,
-                        "msg" : "Your bid was submited succesfully!",
-                    })
-                return render(request, "auctions/ad.html", {
-                    "ad_pk" : ad.pk,
-                    "ad" : ad,
-                    "form" : form,
-                    #"w_msg" : w_msg,
-                    "watched" : watched,
-                    "msg" : msg,
-                })
-            else:
-                msg = "The input wasn't valid, try agian."
-"""
 
 def newad(request):
     username = request.user.username
