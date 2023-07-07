@@ -18,7 +18,7 @@ from decimal import Decimal
 class NewAd(ModelForm):
      class Meta:
          model = Ad
-         exclude = ["actual_price", "user"]
+         exclude = ["actual_price", "user", "active"]
 
 
 """ 
@@ -61,12 +61,17 @@ class NewComment(forms.Form):
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "ads" : Ad.objects.all(),
+        "ads" : Ad.objects.filter(active=True),
     })
 
 def categories(request):
     return render(request, "auctions/categories.html", {
         "categories" :Cat.objects.all(),
+    })
+
+def watchinglist(request):
+    return render(request, "auctions/watchinglist.html", {
+        "watched" : Watchlist.objects.filter(user=request.user.id)
     })
 
 def category(request, name):
@@ -85,6 +90,27 @@ def ad(request, ad_pk):
         })
     username = request.user.username
     user = User.objects.get(username=username)
+    max = Bid.objects.filter(user=user.id, ad=ad_pk).aggregate(Max("price"))
+    max_user_bid = max["price__max"]
+    if not ad.active:
+        if (max_user_bid == ad.actual_price):
+            winner = True
+            msg = "Congratulations.Your were the winner of this auction."
+        else:
+            msg = "Sorry, this auction was closed, the listing is no loger active."
+            winner = False
+        return render(request,"auctions/non_active.html", {
+            "ad" : ad,
+            "winner" : winner,
+        })
+
+    user = User.objects.get(username=username)
+    ader = User.objects.get(username=ad.user)
+
+    if (user.pk==ader.pk):
+        can_close=True
+    else:
+        can_close=False
     wl = Watchlist.objects.filter(user=user.pk, ad=ad_pk).first()
     if wl:
         watched = True
@@ -105,6 +131,8 @@ def ad(request, ad_pk):
             content = request.POST["newcomment"]
             new = Comment(user=user , ad=ad, content=content)
             new.save()
+        elif "Close" in submit:
+            Ad.objects.filter(pk=ad.pk).update(active=False)
         else:
             form = NewBid()
             form = NewBid(request.POST)
@@ -116,7 +144,7 @@ def ad(request, ad_pk):
                 elif (actual_price<=ad.actual_price):
                     msg = "You must bid higher than the acutal price."
                 else:
-                    b = Bid(user=ad.user, ad=ad, price=actual_price)
+                    b = Bid(user=user, ad=ad, price=actual_price)
                     b.save()
                     msg = "Your bid was submited succesfully!"
                     Ad.objects.filter(pk=ad.pk).update(actual_price=actual_price)
@@ -132,6 +160,7 @@ def ad(request, ad_pk):
                         "comments" : comments,
                         "watched" : watched,
                         "msg" : msg,
+                        "can_close" : can_close,
                     })
                 try:
                     comments = Comment.objects.filter(ad=ad_pk)
@@ -144,6 +173,7 @@ def ad(request, ad_pk):
                     "comments" : comments,
                     "watched" : watched,
                     "msg" : msg,
+                    "can_close" : can_close,
                 })
             else:
                 msg = "The input wasn't valid, try agian."
@@ -158,6 +188,7 @@ def ad(request, ad_pk):
         "comments" : comments,
         "watched" : watched,
         "msg" : msg,
+        "can_close" : can_close,
     })
 
 def newad(request):

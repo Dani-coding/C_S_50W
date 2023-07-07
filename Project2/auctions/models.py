@@ -21,6 +21,7 @@ class Ad(models.Model):
     actual_price = models.DecimalField(max_digits=7, decimal_places=2, blank=False, default=0)
     image = models.URLField(blank=True)
     cat = models.ForeignKey(Cat, on_delete=models.SET_NULL, verbose_name="category", null=True, blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.id}: {self.title} by {self.user} at {self.start_bid}€"
@@ -35,7 +36,7 @@ class Bid(models.Model):
 
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watcher",blank=False)
-    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name="watched", blank=False)
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name="watching", blank=False)
 
     def __str__(self):
         return f"{self.user} is watching {self.ad}"

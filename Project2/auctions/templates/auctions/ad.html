@@ -2,19 +2,32 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<form action="{% url 'ad' ad.pk %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="watched" value="{{ watched }}">
-    <input type="hidden" name="iscomment" value="False">
-    <span> 
-        {% if watched %} 
-           You are watching this listing
-        {% else %}
-            You are not watching this listing
-        {% endif %}
-        <input type="submit" name="click" value="Change it">
-    </span>
-</form>
+<div style="margin: 0; background-color: rgb(233, 218, 149); width: 400px; padding: 3px;">
+    <form action="{% url 'ad' ad.pk %}" method="post">
+        {% csrf_token %}
+        <span> 
+            {% if watched %} 
+            You are watching this listing
+            {% else %}
+                You are not watching this listing
+            {% endif %}
+            <input type="submit" name="click" value="Change it">
+        </span>
+    </form>
+</div>
+
+{% if can_close %}
+    <div style="margin: 0; background-color: rgb(240, 94, 94); width: 400px; padding: 3px;">
+        <form action action="{% url 'ad' ad.pk %}" method="post">
+            {% csrf_token %}
+            <span>
+                Click to close de auction
+                <input type="submit" name="click" value="Close">
+            </span>
+        </form>
+    </div>
+{% endif %}
+
 <h2>{{ ad.title }}</h2>
     <div class="ad2">
         <p> {{ ad.description }} </p>
@@ -26,8 +39,6 @@
                 {% csrf_token %}
                 {{ form }}
                 <input type="submit" name="click" value="BID">
-                <input type="hidden" name="watchlist" value="False">
-                <input type="hidden" name="iscomment" value="False">
             </form>
         {% else %}
             <h4> The actual price is: {{ ad.actual_price }} €</h4>
@@ -36,8 +47,6 @@
                 {% csrf_token %}
                 {{ form }}
                 <input type="submit" name="click" value="BID">
-                <input type="hidden" name="watchlist" value="False">
-                <input type="hidden" name="iscomment" value="False">
             </form>
 
         {% endif %}
@@ -52,7 +61,7 @@
 
 <div style="width: 400px;">
     <div >
-        <div style="background-color: rgb(129, 197, 253); margin-bottom: 2px;">
+        <div style="background-color: rgb(129, 197, 253); margin-bottom: 2px; padding: 3px;">
             <h4>You can comment... </h4>
             <h6> {{ user }} says:</h6>
             <form action="{% url 'ad' ad.pk %}" method="post">
@@ -65,7 +74,7 @@
 
     <div>
         {% for comment in comments %}
-            <div style="background-color: rgb(133, 241, 241); margin-bottom: 2px;">
+            <div style="background-color: rgb(133, 241, 241); margin-bottom: 2px; padding: 3px;">
                 <span>
                     <h6> {{ comment.user }} said:</h6>
                     <textarea readonly maxlength=200 cols="50" style="resize: none;"> {{ comment.content }} </textarea>
