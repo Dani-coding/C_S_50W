@@ -17,6 +17,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector("#to_error").style.display = "none";
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
   
   // Clear out composition fields
@@ -34,7 +35,7 @@ function send_data(){
       subject: document.querySelector("#compose-subject").value,
       body: document.querySelector("#compose-body").value,
     });
-    
+
     fetch("/emails",{
       method: "POST",
       body: data,
@@ -54,6 +55,8 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
+
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -63,9 +66,6 @@ function load_mailbox(mailbox) {
     show_mails(emails);
   })
   .catch(error => alert(error.message)); // ------------------- No funciona, no pilla el error
-  
-
-  //--------- reaccionar a eventos, por ejemplo, pinchar e ir a mail
 }
 
 
@@ -75,9 +75,19 @@ function show_mails(emails){
     const entry = document.createElement("div");
     entry.className="entry";
     entry.className="border border-dark";
+    entry.style.cursor="pointer";
     entry.innerHTML="From:" + mail.sender + " ; Subject: " + mail.subject + " ; In:" + mail.timestamp;
+    entry.addEventListener('click', function() {
+      fetch("/emails/" + mail.id, {
+        method: 'PUT',
+        body: JSON.stringify({
+            read: true
+        })
+      })
+      open_mail(mail.id);
+  });
     if ( !mail.read ){
-      entry.style.backgroundColor = "red";
+      entry.style.backgroundColor = "gray";
     }
     else{
       entry.style.backgroundColor = "white";
@@ -85,4 +95,47 @@ function show_mails(emails){
     }
     view.appendChild(entry);
   });
+}
+
+function open_mail(id){
+  fetch("/emails/" + id)
+  .then(response => response.json())
+  .then(mail => {
+      show_mail(mail);
+  });
+}
+
+function show_mail(mail){
+
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'block';
+
+  const box = document.querySelector('#mail-view');
+  box.innerHTML = "";
+  let aux = document.createElement("p");
+  aux.innerHTML= "<b>From: </b>" + mail.sender;
+  box.appendChild(aux);
+  const recipients = mail.recipients;
+  let to = "<b>To: </b>";
+  recipients.forEach(element => {
+    to = to + element + ", ";
+  });
+  to = to.slice(0, -2);
+  aux = document.createElement("p");
+  aux.innerHTML= to;
+  box.appendChild(aux);
+  aux = document.createElement("p");
+  aux.innerHTML= "<b>Subject: </b>" + mail.subject;
+  box.appendChild(aux);
+  aux = document.createElement("p");
+  aux.innerHTML= "<b>Timestamp: </b>" + mail.timestamp;
+  box.appendChild(aux);
+  aux = document.createElement("hr");
+  box.appendChild(aux);
+  aux = document.createElement("textarea");
+  aux.innerHTML= mail.body;
+  aux.className = "form-control";
+  box.appendChild(aux);
+
 }
