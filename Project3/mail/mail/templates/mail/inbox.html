@@ -14,18 +14,19 @@
     <div id="emails-view">
     </div>
 
-    <div id="compose-view">
+    <div id="compose-view" onsubmit="event.preventDefault()">
         <h3>New Email</h3>
         <form id="compose-form" method="post">
             {% csrf_token %}
             <div class="form-group">
                 From: <input disabled class="form-control" value="{{ request.user.email }}">
             </div>
+            <div id="to_error" style="color: red; display: none"> * The entry in the field is not valid, try again.</div>
             <div class="form-group">
                 To: <input id="compose-recipients" class="form-control">
             </div>
             <div class="form-group">
-                <input class="form-control" id="compose-subject" placeholder="Subject">
+                Subject:  <input class="form-control" id="compose-subject" placeholder="Subject">
             </div>
             <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
             <input type="submit" class="btn btn-primary" id="compose-submit"/>

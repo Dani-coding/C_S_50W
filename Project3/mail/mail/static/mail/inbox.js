@@ -1,54 +1,54 @@
+
 document.addEventListener('DOMContentLoaded', function() {
+
+  // By default, load the inbox
+  load_mailbox('inbox');
 
   // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
-
-  // By default, load the inbox
-  load_mailbox('inbox');
+  document.querySelector('#compose').addEventListener('click', () => compose_email());
 });
+
 
 function compose_email() {
 
   // Show compose view and hide other views
+  document.querySelector("#to_error").style.display = "none";
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
-
+  
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
-  document.querySelector("#compose-submit").addEventListener("click", send_data)
+  document.querySelector("#compose-submit").addEventListener("click", () => send_data());
+}
 
 
 function send_data(){
-    datos = JSON.stringify({
+
+    data = JSON.stringify({
       recipients: document.querySelector("#compose-recipients").value,
       subject: document.querySelector("#compose-subject").value,
       body: document.querySelector("#compose-body").value,
-    })
+    });
+    
     fetch("/emails",{
       method: "POST",
-      body: JSON.stringify({
-        recipients: document.querySelector("#compose-recipients").value,
-        subject: document.querySelector("#compose-subject").value,
-        body: document.querySelector("#compose-body").value,
-      })
+      body: data,
     })
-    .then(response => response.json())
-    .then(result => {
-      if (result.status == 201){
-        load_mailbox("sent")
+    .then(response => {
+      if (response.status == 201)
+        load_mailbox("sent");
+      else{
+        document.querySelector("#compose-recipients").focus();
+        document.querySelector("#to_error").style.display = "block";
       }
-      else if (result.status == 400){
-        document.querySelector("#compose-recipients").focus();    // --------- También falta gestionar errores !!!
-      }
-
-    });
-  }
+    })   
 }
+
 
 function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
@@ -60,18 +60,17 @@ function load_mailbox(mailbox) {
   fetch("/emails/" + mailbox)
   .then(response => response.json())
   .then(emails => {
-    console.log(emails);
     show_mails(emails);
   })
-  .catch(error => console.log(error.message)) // ------------------- No funciona, no pilla el error
+  .catch(error => alert(error.message)); // ------------------- No funciona, no pilla el error
   
 
   //--------- reaccionar a eventos, por ejemplo, pinchar e ir a mail
 }
 
+
 function show_mails(emails){
   const view = document.querySelector("#emails-view");
-  console.log("entra el show_mails y la variables vale: "+emails);
   emails.forEach(mail => {
     const entry = document.createElement("div");
     entry.className="entry";
