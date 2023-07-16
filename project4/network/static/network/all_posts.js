@@ -28,6 +28,7 @@ function show_all(){
     fetch("/all_posts")
     .then(response => response.json())
     .then(posts => {put_all(posts);})
+    .then(paginate)
     .catch(error => alert("El error está en el fetch de show_all\n" + error.message));
 }
 function put_all(posts){
@@ -71,5 +72,6 @@ function add_new(){
         `;
         b_all.prepend(box);
     })
+    .then(paginate)
     .catch(error => alert("error fetching last_post to add_new\n" + error));
 }
