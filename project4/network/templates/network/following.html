@@ -5,26 +5,20 @@
     {% if user.is_authenticated %}
         <h3> Following Posts </h3>
 
-        
+
         <div class="all_posts" id="all_posts">
         </div>
 
+    <nav class="pagination-container">
+        <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">&lt;</button>
 
-        <nav class="pagination-container">
-            <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
-              &lt;
-            </button>
+        <div id="pagination-numbers"></div>
 
-            <div id="pagination-numbers">
-            </div>
+        <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">&gt;</button>      
+    </nav>
 
-            <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
-              &gt;
-            </button>
-          
-          </nav>
-          
-        <script src="{% static 'network/Following.js' %}"></script>
+    <script src="{% static 'network/all_posts.js' %}"></script>
+    <script src="{% static 'network/pagination.js' %}"></script>
     {% else %}
 
         <h3>You should be log in</h3>
