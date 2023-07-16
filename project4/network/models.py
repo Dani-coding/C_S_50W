@@ -8,11 +8,20 @@ class User(AbstractUser):
 class Post(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster", blank=False)
     content = models.TextField(max_length=500, blank=False)
-    time = models.DateField(auto_now_add=True)
+    time = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Nº: {self.id}, poster is {self.name}, have {self.likes} likes"
+    
+    def serialize(self):
+        return {
+            "name": self.name.username,
+            "content": self.content,
+            "time": self.time.strftime("%b %d %Y, %I:%M %p"),
+            "likes": self.likes,
+        }
+    
 
 class Follower(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower", blank=False)
@@ -20,6 +29,12 @@ class Follower(models.Model):
     
     def __str__(self):
         return f"{self.name} is follower of {self.of}"
+    
+    def serialize(self):
+        return {
+            "name": self.of,
+        }
+
 
 class Followed(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed", blank=False)
