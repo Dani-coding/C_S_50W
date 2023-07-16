@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+
+    {% if user.is_authenticated %}
+        <h3> Following Posts </h3>
+        <div class="all_posts" id="all_posts">
+        </div>
+        <script src="{% static 'network/Following.js' %}"></script>
+    {% else %}
+
+        <h3>You should be log in</h3>
+
+    {% endif %}
+
+
+
+{% endblock %}

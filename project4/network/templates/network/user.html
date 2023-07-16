@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+
+    <h5 style="display:inline-block;">Page profile of: </h5> <h2 style="display: inline-block;" id="profile_name">{{ name }}</h2>
+
+    {% if name != username %}
+        <button id ="follow_button" style="float: right; margin-right: 10%; display: none;"></button>
+    {% endif %}
+    <div id="follow"></div>
+    <hr>
+    <h3> All Posts of {{ name }} </h3>
+    <div class="all_posts" id="all_posts">
+    </div>
+
+    <script src="{% static 'network/profile.js' %}"></script>
+
+{% endblock %}
