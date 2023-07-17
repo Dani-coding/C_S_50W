@@ -16,12 +16,12 @@ async function new_post(){
         method: "POST",
         body: data,
     })
-    //.then(()=>show_all())
     .catch(error => console.log("error en new_post" + error))
     document.querySelector("#content").value = "";
+
+    window.location.reload();
     
-    //show_all();
-    add_new();
+    //add_new();
 }
 
 function show_all(){

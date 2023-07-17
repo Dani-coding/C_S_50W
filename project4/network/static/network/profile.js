@@ -86,6 +86,7 @@ function show_all(name){
     fetch("/posts_of/" + name)
     .then(response => response.json())
     .then(posts => {put_all(posts);})
+    .then(paginate)
     .catch(error => alert("El error está en el fetch de show_all\n" + error.message));
 }
 

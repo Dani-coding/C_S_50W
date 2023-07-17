@@ -18,9 +18,12 @@ function needed(){
 
 }
 
-function paginate(added_new){
+function paginate(){
+    
+    document.getElementById("pagination-numbers").innerHTML="";
+    /*
     if (added_new)
-        document.getElementById("pagination-numbers").innerHTML="";
+        document.getElementById("pagination-numbers").innerHTML="";*/
     if (needed()){
         document.getElementById("pagination-nav").classList.remove("hidden");
         getPaginationNumbers();
