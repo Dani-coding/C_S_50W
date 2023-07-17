@@ -23,8 +23,6 @@ urlpatterns = [
     path("f_change/<str:names>", views.f_change, name="f_change"),
     #path("follows/<str:name>", views.follows, name="follows"),
     path("following_posts/<str:name>", views.following_posts, name="following_posts"),
-
-
-    
+    path("edit_post", views.edit_post, name="edit_post"),   
     
 ]

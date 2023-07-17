@@ -32,6 +32,23 @@ def new_post(request):
     post.save()
     return JsonResponse({"message": "Post was loaded successfully."}, status=201)
 
+@csrf_exempt
+def edit_post(request):
+    
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    data = json.loads(request.body)
+
+    try:
+        post = Post.objects.get(name=request.user, pk=data.get("pk", ""))
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+        
+    #content = data.get("content", "")
+    post.content = data.get("content", "")
+    post.save()
+    return JsonResponse({"message": "Post was edited successfully."}, status=201)
 
 def all_posts(request):
     posts = Post.objects.all().order_by("-time").all()

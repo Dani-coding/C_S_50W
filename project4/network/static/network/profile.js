@@ -103,13 +103,20 @@ function put_all(posts){
             <p>${post.content}</p>
             <p>${post.time}</p>
             <p>Likes: ${post.likes}</p>
-            `;
-        username = document.querySelector("#username").innerHTML;
+            <p hidden>${post.pk}</p>  
+        `;
+        const username = document.querySelector("#username").innerHTML;
         if ((username != "_/log-out/_") && (username == post.name)){
-            box.innerHTML+=`<button>Edit</button>`;
+            let b = document.createElement("button");
+            b.innerHTML="Edit"
+            b.addEventListener("click", () => edit_begin(box));
+            box.appendChild(b);
         }
-       
         b_all.appendChild(box);
     });
     }
+}
+
+function edit (box){
+
 }
