@@ -8,30 +8,44 @@ function to_top(){
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function paginate(){
-    console.log("entra en paginate");
-    getPaginationNumbers();
-    setCurrentPage(1);
+function needed(){
+    const paginatedList = document.getElementById("all_posts");
+    const listItems = paginatedList.querySelectorAll("div");
+    if (listItems.length>10)
+        return true;
+    else
+        return false;
 
-    prev_button.addEventListener("click", () => {
-        setCurrentPage(currentPage - 1);
-        to_top();
-    });
-    
-    next_button.addEventListener("click", () => {
-        setCurrentPage(currentPage + 1);
-        to_top();
-    });
-    
-    document.querySelectorAll(".pagination-number").forEach((button) => {
-        const pageIndex = Number(button.getAttribute("page-index"));
-        if (pageIndex) {
-            button.addEventListener("click", () => {
-                setCurrentPage(pageIndex);
-                to_top();
-            });
-        }
-      });
+}
+
+function paginate(added_new){
+    if (added_new)
+        document.getElementById("pagination-numbers").innerHTML="";
+    if (needed()){
+        document.getElementById("pagination-nav").classList.remove("hidden");
+        getPaginationNumbers();
+        setCurrentPage(1);
+
+        prev_button.addEventListener("click", () => {
+            setCurrentPage(currentPage - 1);
+            to_top();
+        });
+        
+        next_button.addEventListener("click", () => {
+            setCurrentPage(currentPage + 1);
+            to_top();
+        });
+        
+        document.querySelectorAll(".pagination-number").forEach((button) => {
+            const pageIndex = Number(button.getAttribute("page-index"));
+            if (pageIndex) {
+                button.addEventListener("click", () => {
+                    setCurrentPage(pageIndex);
+                    to_top();
+                });
+            }
+        });
+    }
 }
 
 const appendPageNumber = (index) => {
@@ -48,7 +62,6 @@ const getPaginationNumbers = () => {
     const paginatedList = document.getElementById("all_posts");
     const listItems = paginatedList.querySelectorAll("div");
     const pageCount = Math.ceil(listItems.length / pag_limit);
-    console.log(`hay ${listItems.length} items, y por tanto, se usarán ${pageCount} páginas`);
     for (let i = 1; i <= pageCount; i++) {  
         appendPageNumber(i);  
     }
@@ -66,7 +79,6 @@ const setCurrentPage = (pageNum) => {
 
     const prevRange = (pageNum - 1) * pag_limit;  
     const currRange = pageNum * pag_limit;  
-    console.log(`se deberían mostrar entradas desde ${prevRange} hasta ${currRange}`);
 
     listItems.forEach((item, index) => {  
         item.classList.add("hidden");  

@@ -72,6 +72,6 @@ function add_new(){
         `;
         b_all.prepend(box);
     })
-    .then(paginate)
+    .then(paginate(true))
     .catch(error => alert("error fetching last_post to add_new\n" + error));
 }
