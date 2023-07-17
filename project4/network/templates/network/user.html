@@ -2,17 +2,14 @@
 {% load static %}
 {% block body %}
 
-    {% if user.is_authenticated %}
-        <div class="new_post">
-            <h3> New Post </h3>
-            <form>
-                <textarea required id="content" name="new_post" rows="3" placeholder="type here"></textarea>
-                <input type="button" id="submit_new" name="new" value="Post">
-            </form>
-        </div>
-    {% endif %}
+    <h5 style="display:inline-block;">Page profile of: </h5> <h2 style="display: inline-block;" id="profile_name">{{ name }}</h2>
 
-    <h3> All Posts </h3>
+    {% if name != username %}
+        <button id ="follow_button" style="float: right; margin-right: 10%; display: none;"></button>
+    {% endif %}
+    <div id="follow"></div>
+    <hr>
+    <h3> All Posts of {{ name }} </h3>
     <div class="all_posts" id="all_posts">
     </div>
 
@@ -28,4 +25,3 @@
     <script src="{% static 'network/pagination.js' %}"></script>
 
 {% endblock %}
-

@@ -3,18 +3,11 @@
 {% block body %}
 
     {% if user.is_authenticated %}
-        <div class="new_post">
-            <h3> New Post </h3>
-            <form>
-                <textarea required id="content" name="new_post" rows="3" placeholder="type here"></textarea>
-                <input type="button" id="submit_new" name="new" value="Post">
-            </form>
-        </div>
-    {% endif %}
+        <h3> Following Posts </h3>
 
-    <h3> All Posts </h3>
-    <div class="all_posts" id="all_posts">
-    </div>
+
+        <div class="all_posts" id="all_posts">
+        </div>
 
     <nav class="pagination-container">
         <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">&lt;</button>
@@ -26,6 +19,12 @@
 
     <script src="{% static 'network/all_posts.js' %}"></script>
     <script src="{% static 'network/pagination.js' %}"></script>
+    {% else %}
+
+        <h3>You should be log in</h3>
+
+    {% endif %}
+
+
 
 {% endblock %}
-
