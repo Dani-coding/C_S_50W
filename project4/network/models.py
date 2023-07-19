@@ -5,6 +5,7 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
 class Post(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster", blank=False)
     content = models.TextField(max_length=500, blank=False)
@@ -44,12 +45,18 @@ class Followed(models.Model):
     def __str__(self):
         return f"{self.name} is followed by {self.of}"
 
+
 class Like(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liker", blank=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="liked", blank=False)
 
     def __str__(self):
         return f"{self.name} likes this post: {self.post}"
+    
+    def serialize(self):
+        return {
+            "post": self.post.pk,
+        }
 
 
 

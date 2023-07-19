@@ -32,6 +32,7 @@ def new_post(request):
     post.save()
     return JsonResponse({"message": "Post was loaded successfully."}, status=201)
 
+
 @csrf_exempt
 def edit_post(request):
     
@@ -45,15 +46,51 @@ def edit_post(request):
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
         
-    #content = data.get("content", "")
     post.content = data.get("content", "")
     post.save()
     return JsonResponse({"message": "Post was edited successfully."}, status=201)
+
+
+@csrf_exempt
+#@login_required
+def all_likes(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    if request.user.is_authenticated:
+        likes = Like.objects.filter(name=request.user).all() #values_list('post', flat=True).distinct()
+        #return JsonResponse(likes, safe=False)
+        return JsonResponse([like.serialize() for like in likes], safe=False)
+    else:
+        return HttpResponse(0)
+
+
+@csrf_exempt
+def change_like(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    data = json.loads(request.body)
+    post_pk =data.get("post_pk","")
+    post = Post.objects.get(pk = post_pk)
+    try:
+        like = Like.objects.get(name=request.user, post=post_pk)
+    except Like.DoesNotExist:
+        like = Like(name=request.user, post=post)
+        like.save()
+        post.likes += 1
+        post.save()
+        return JsonResponse(post.serialize(), safe=False)
+    
+    like.delete()
+    post.likes -= 1
+    post.save()
+    return JsonResponse(post.serialize(), safe=False)
+
 
 def all_posts(request):
     posts = Post.objects.all().order_by("-time").all()
    
     return JsonResponse([post.serialize() for post in posts], safe=False)
+
 
 def posts_of(request, name):
     user = User.objects.get(username = name)
@@ -79,22 +116,18 @@ def following_posts(request, name):
     posts = Post.objects.filter(name__in = follows).order_by("-time").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
 
-    # -------------------  Remember check how works with empty qs (if follows no one) !!!!!!!!!!!
-
-
 
 def n_followers(request, name):
     user = User.objects.get(username = name)
     num = Follower.objects.filter(of = user).count()
-    #return JsonResponse(json.dumps({"num" : num}), safe=False)
     return HttpResponse(num)
+
 
 def n_follows(request, name):
     user = User.objects.get(username = name)
     num = Follower.objects.filter(name = user).count()
-    #return JsonResponse(json.dumps({"num" : num}), safe=False)
-
     return HttpResponse(num)
+
 
 def is_following(request, names):
     users = names.split(" :: ")    
@@ -102,11 +135,10 @@ def is_following(request, names):
     followed = User.objects.get(username = users [1])
     f = Follower.objects.filter(name = follower, of = followed).first()
     if (f!=None):
-        #return JsonResponse(json.dumps({"is_following" : True}), safe=False)
         return HttpResponse(1)
     else:
-        #return JsonResponse(json.dumps({"is_following" : False}), safe=False)
         return HttpResponse(0)
+
 
 def f_change(request, names):
     users = names.split(" :: ")
@@ -115,22 +147,17 @@ def f_change(request, names):
     f = Follower.objects.filter(name = follower, of = followed).first()
     if (f!=None):
         f.delete()
-        #return JsonResponse(json.dumps({"now" : "Follow"}), safe=False)
         return HttpResponse("Follow")
     else:
         f = Follower(name = follower, of = followed)
         f.save()
-        #f = Follower.objects.create_follower(follower, followed)
-        #return JsonResponse(json.dumps({"now" : "Unfollow"}), safe=False)
         return HttpResponse("Unfollow")
 
 
 def last_post(request):
     posts = Post.objects.all().order_by("-time").all()
-
-    #posts = Post.objects.all(name=request.user)
-
     return JsonResponse(posts[:1].serialize())
+
 
 def user(request, name):
     return render(request, "network/user.html", {

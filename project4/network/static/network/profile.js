@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const name = document.querySelector("#profile_name").innerHTML
     show_all(name);
@@ -74,49 +75,76 @@ function change(names){
     fetch("/f_change/" + names)
     .then(response => response.text())
     .then(data => {
-    console.log("de f_change-> datos: " + data + "  y su tipo es: " + typeof data);
-    document.querySelector("#follow_button").innerHTML=data;
+        document.querySelector("#follow_button").innerHTML=data;
     })
     .then(n_followers)
     .catch(error => alert("El error está en el fetch f_change\n" + error.message));
-
 }
 
 function show_all(name){
     fetch("/posts_of/" + name)
     .then(response => response.json())
-    .then(posts => {put_all(posts);})
-    .then(paginate)
+    .then(posts => {
+        const username = document.querySelector("#username").innerHTML;
+        if (username != "_/log-out/_")
+            put_all_likes(posts);
+        else 
+            put_all(posts);
+    })
     .catch(error => alert("El error está en el fetch de show_all\n" + error.message));
 }
 
-function put_all(posts){
-    console.log(posts);
-    if (posts != null){
-    const b_all = document.querySelector("#all_posts");
-    posts.forEach(post => {
-        const box = document.createElement("div");
-        box.className="border border-dark";
-
-        box.innerHTML=`
-            <h4>${post.name}</h4>
-            <p>${post.content}</p>
-            <p>${post.time}</p>
-            <p>Likes: ${post.likes}</p>
-            <p hidden>${post.pk}</p>  
-        `;
-        const username = document.querySelector("#username").innerHTML;
-        if ((username != "_/log-out/_") && (username == post.name)){
-            let b = document.createElement("button");
-            b.innerHTML="Edit"
-            b.addEventListener("click", () => edit_begin(box));
-            box.appendChild(b);
+function put_all_likes(posts){
+    fetch("/all_likes",{method:"POST"})
+    .then(response => response.json())
+    .then(jsonlikes => {
+        let likes=[];
+        jsonlikes.forEach(like => {
+            likes.push(like.post);
+        });
+        if (posts != null){
+            const username = document.querySelector("#username").innerHTML;
+            const b_all = document.querySelector("#all_posts");
+            posts.forEach(post => {
+                const box = document.createElement("div");
+                box.className="border border-dark";
+                box.innerHTML=`
+                    <a href="user/${post.name}"><h4>${post.name}</h4></a>
+                    <p>${post.content}</p>
+                    <p>${post.time}</p>
+                    <p>Likes: ${post.likes}</p>
+                    <p hidden>${post.pk}</p>  
+                    `;
+                if (username == post.name){
+                    const b = document.createElement("button");
+                    b.innerHTML="Edit"
+                    b.addEventListener("click", () => edit_begin(box));
+                    box.appendChild(b);
+                }
+                like_button(box, post.pk, likes);
+                b_all.appendChild(box);
+            });
         }
-        b_all.appendChild(box);
-    });
-    }
+    })
+    .then(paginate)
+    .catch(error => alert("El error está en el fetch de get_all_likes\n" + error.message));
 }
 
-function edit (box){
-
+function put_all(posts){
+    if (posts != null){
+        const b_all = document.querySelector("#all_posts"); 
+        posts.forEach(post => {
+            const box = document.createElement("div");
+            box.className="border border-dark";
+            box.innerHTML=`
+                <h4>${post.name}</h4>
+                <p>${post.content}</p>
+                <p>${post.time}</p>
+                <p>Likes: ${post.likes}</p>
+                <p hidden>${post.pk}</p>  
+            `;
+            b_all.appendChild(box);
+        });
+    }
+    paginate();
 }
