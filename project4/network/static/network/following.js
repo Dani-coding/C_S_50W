@@ -10,6 +10,6 @@ function show_following(username){
         .then(response => response.json())
         .then(posts => {put_all(posts);})
         .then(()=>{put_likes();})    
-        .catch(error => console.log("error in 'show_following()'\n" + error.message));
+        //.catch(error => console.log("error in 'show_following()'\n" + error.message));
     }
 }
