@@ -4,22 +4,29 @@
 
     {% if user.is_authenticated %}
         <h3> Following Posts </h3>
-
-
-        <div class="all_posts" id="all_posts">
+        <div class="contenido">
+            <div class="all_posts" id="all_posts"></div>
         </div>
-
-    <nav class="pagination-container hidden" id = "pagination-nav">
-        <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">&lt;</button>
-
-        <div id="pagination-numbers"></div>
-
-        <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">&gt;</button>      
-    </nav>
-
+    
+        <nav class="my-pagination-container hidden" id = "pagination-nav">
+            <button class="my-pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">&lt;</button>
+    
+            <div id="pagination-numbers"></div>
+    
+            <button class="my-pagination-button" id="next-button" title="Next page" aria-label="Next page">&gt;</button>      
+        </nav>
+    
+    <!---   *** Pagination with Bootstrap ***
+    
+        <nav class ="sticky-bottom d-none" id = "pagination-nav">
+            <ul class="pagination justify-content-center" id="buttons-list"></ul>
+        </nav>
+    -->
+            
     <script src="{% static 'network/Following.js' %}"></script>
     <script src="{% static 'network/pagination.js' %}"></script>
     <script src="{% static 'network/like.js' %}"></script>
+    <script src="{% static 'network/show_posts.js' %}"></script>
     {% else %}
 
         <h3>You should be log in</h3>
