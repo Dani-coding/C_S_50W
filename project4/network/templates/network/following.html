@@ -3,7 +3,7 @@
 {% block body %}
 
     {% if user.is_authenticated %}
-        <h3> Following Posts </h3>
+        <p class="following-title"> Post of users you are following </h3>
         <div class="contenido">
             <div class="all_posts" id="all_posts"></div>
         </div>
@@ -23,13 +23,14 @@
         </nav>
     -->
             
-    <script src="{% static 'network/Following.js' %}"></script>
-    <script src="{% static 'network/pagination.js' %}"></script>
-    <script src="{% static 'network/like.js' %}"></script>
-    <script src="{% static 'network/show_posts.js' %}"></script>
+        <script src="{% static 'network/Following.js' %}"></script>
+        <script src="{% static 'network/pagination.js' %}"></script>
+        <script src="{% static 'network/like.js' %}"></script>
+        <script src="{% static 'network/show_posts.js' %}"></script>
+
     {% else %}
 
-        <h3>You should be log in</h3>
+        <p class="following-title"> You should be log in </h3>
 
     {% endif %}
 

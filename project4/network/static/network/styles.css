@@ -32,6 +32,7 @@
 }
 
 .posts{
+    margin-inline: 5px;
     width: 600px;
     min-width: 320px;
 }
@@ -63,7 +64,7 @@
 }
 
 .post-edit{
-    color: #0d6efd;
+    color: #6f43c0; /*#0d6efd;*/
     text-decoration: none;
     font-family:sans-serif;
     font-size: 16px;
@@ -172,6 +173,9 @@
     white-space: pre-wrap;
     min-width: 100%;
     border: none;
+    display: block;
+    font-size: 18px;
+    font-family: 'Lucida Sans';
 }
 .edit_area:focus{
     outline: none;
@@ -189,11 +193,6 @@
     background-color: #4d5152;
 }
 
-#profile_data{
-    margin-inline: 5%;
-    padding-inline: 5px;
-    background-color: #ebbe55; 
-}
 #follow_icon{
     margin-left: 8px;
 }
@@ -205,7 +204,7 @@
     fill: #cf4f4f;
 }
 .follow_link{
-    color: #0d6efd;
+    color: #6f43c0; /*#0d6efd;*/
     text-decoration: none;
     font-family:sans-serif;
     font-size: 16px;
@@ -218,6 +217,31 @@
     opacity: 50%;
     cursor: pointer;
 }
+.following-title{
+    margin-left: 12px;
+    margin-bottom: 3px;
+    color: #d1d1d1;
+    font-family:sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    /*line-height: 30px;*/
+}
+.top-space{
+    padding-top: 12px;
+}
+
+.top-box{
+    display: flex;
+    padding: 0;
+}
+.top-box-data{
+    margin-top: 8px;
+    margin-inline: 8px;
+    /*width: 300px;
+    min-width: 150px;
+*/
+}
+
 .profile-text{
     color: #000000;
     text-decoration: none;
@@ -235,4 +259,53 @@
     font-weight: 600;
     line-height: 30px;
     vertical-align: middle;
+}
+.profile-data{
+    color: #000000;
+    padding-left: 20px;
+    text-decoration: none;
+    font-family: system-ui;
+    font-size: 16px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+.title{
+    color: #d1d1d1;
+}
+hr {
+    height: 2px;
+    background-color: black;
+    border: none;
+}
+.new-post-icon{
+    fill: #6f43c0;
+    width: 26px;
+    height: 26px;
+}
+/*
+#new_post_icon{
+    display: flex;
+    align-content: end;
+    float: right;
+}*/
+.new-post-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px; 
+    padding-inline: 8px; 
+    background-color: #ebbe55; 
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px;
+}
+.new-down{
+    transform-origin: 50% 50% 0;  
+    transform: scaleY(-1);
+}
+.new-header-alone{
+    border-bottom-left-radius: 10px; 
+    border-bottom-right-radius: 10px;
+}
+.new-box-close{
+    width: 150px;
+    min-width: 0;
 }

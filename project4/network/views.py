@@ -147,11 +147,11 @@ def f_change(request, names):
     f = Follower.objects.filter(name = follower, of = followed).first()
     if (f!=None):
         f.delete()
-        return HttpResponse("Follow")
+        return HttpResponse(0)
     else:
         f = Follower(name = follower, of = followed)
         f.save()
-        return HttpResponse("Unfollow")
+        return HttpResponse(1)
 
 
 def last_post(request):

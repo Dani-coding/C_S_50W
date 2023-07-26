@@ -2,16 +2,14 @@
 {% load static %}
 {% block body %}
 
-    <h5 style="display:inline-block;">Page profile of: </h5> <h2 style="display: inline-block;" id="profile_name">{{ name }}</h2>
+    <div hidden id="profile_name">{{ name }}</div>
 
-    {% if name != username %}
-        <div id="profile_data" class="hidden"></div>
-        <!---<button id ="follow_button" style="float: right; margin-right: 10%; display: none;"></button>--->
-    {% endif %}
-    <div id="follow"></div>
+    <div id="profile-box" class="top-box">
+        <div id="profile_data" class="hidden top-box-data posts"></div>
+    </div>
+
     <hr>
-    
-    <h3> All Posts of {{ name }} </h3>
+
     <div class="contenido">
         <div class="all_posts" id="all_posts"></div>
     </div>
